@@ -27,7 +27,9 @@ pygame.init()
 cols = 16
 rows = 16
 
-text = B2Q(sys.argv[1])
+fe = open(sys.argv[1], mode = "r")
+
+text = B2Q(fe.read())
 
 cols = len(text) * 16
 
@@ -55,3 +57,6 @@ for i in range(cnt):
 
 f = open("Words.txt", "w")
 f.write(hexstr)
+
+fe.close()
+f.close()

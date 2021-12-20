@@ -1,8 +1,15 @@
 import os
 
+if os.path.exists("cache/") == False:
+	os.mkdir("cache/")
+
+f = open("cache/temp.txt", mode = "w")
+
 print("请输入想要显示的文本：")
 s = input()
-os.system("python Translate.py " + s)
+f.write(s)
+f.close()
+os.system("python Translate.py cache/temp.txt")
 print("文本已转码成功，转码结果位于 Word.txt 中")
 n = ""
 while n.isdigit() == False:

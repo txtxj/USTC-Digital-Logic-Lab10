@@ -5,7 +5,8 @@ s = input()
 if os.path.exists(s) == False:
 	print("文件不存在")
 else:
-	print("请输入暗部阈值（该值越高，所显示的视频中白色占比越多）")
+	print("请输入亮部阈值（该值越低，所显示的视频中白色占比越多）")
+	print("范围0~255")
 	mag = input()
 	os.system("python Translate.py " + s + " " + mag)
 	print("视频已转码成功，转码结果位于 Word.txt 中")

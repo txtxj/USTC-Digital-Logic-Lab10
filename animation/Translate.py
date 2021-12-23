@@ -20,7 +20,6 @@ def video2imgs(video_name, size):
 		# cap.read() 返回值介绍：
 		#   ret 表示是否读取到图像
 		#   frame 为图像矩阵，类型为 numpy.ndarry.
-		# 每次读 2 帧 30 帧降到 15 帧
 		ret, frame = cap.read()
 		ret, frame = cap.read()
 		if ret:
@@ -48,22 +47,13 @@ def img2bits(img, mag):
 	:return: 二进制数的列表
 	"""
 	res = []
-
-	# 灰度是用8位表示的，最大值为255。
-	# 这里将灰度转换到0-1之间
-	# 使用 numpy 的逐元素除法加速，这里 numpy 会直接对 img 中的所有元素都除以 255
-	percents = img / 255
-
-	# 将灰度值进一步转换到 0 或 1 
-	# 同样使用 numpy 的逐元素算法，然后使用 astype 将元素全部转换成 int 值。
-	indexes = (percents * mag).astype(np.int) 
 	
 	# 要注意这里的顺序和 之前的 size 刚好相反（numpy 的 shape 返回 (行数、列数)）
 	height, width = img.shape
 	for col in range(width):
 		line = ""
 		for row in range(height):
-			if indexes[row][col] > 0:
+			if img[row][col] > mag:
 				line += "1"
 			else:
 				line += "0"

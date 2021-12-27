@@ -19,6 +19,10 @@ def clock(a, b):
 def pin(a, b, c):
 	return "    <comp lib=\"0\" loc=\"({:d},{:d})\" name=\"Pin\">\n      <a name=\"tristate\" val=\"false\"/>\n      <a name=\"label\" val=\"{:s}\"/>\n    </comp>\n".format(a, b, c)
 
+def gate(x, y, type, facing, siz, inputs):
+	return "    <comp lib=\"1\" loc=\"({:d},{:d})\" name=\"{:s}\">\n      <a name=\"facing\" val=\"{:s}\"/>\n      <a name=\"size\" val=\"{:d}\"/>\n      <a name=\"inputs\" val=\"{:d}\"/>\n    </comp>\n".format(x, y, type, facing, siz, inputs)
+
+
 # 将 Rom 内容左移四位，求得下一个 Rom 的内容
 def nextList(lst):
 	return lst[5:] + lst[:5]
@@ -75,7 +79,10 @@ wireTY = 190
 wireTS = 10
 
 # 生成所有 Wire ，带拐点
-outList.insert(pos,wire(100, 240, 160, 240))
+outList.insert(pos, wire(80, 260, 80, 270))
+outList.insert(pos, wire(70, 300, 70, 380))
+outList.insert(pos, wire(90, 300, 90, 340))
+outList.insert(pos, wire(100, 240, 160, 240))
 for i in range(plineNum):
 	outList.insert(pos, wire(wireHX, wireHY + i * wireHS, wireTX + i * wireTS, wireHY + i * wireHS))
 	outList.insert(pos, wire(wireTX + i * wireTS, wireHY + i * wireHS, wireTX + i * wireTS, wireTY))
@@ -84,7 +91,9 @@ for i in range(1, plineNum):
 
 # 生成计数器、时钟，及其控制部分
 outList.insert(pos, counter(int(math.log(lineNum, 2)) + 1, lineNum - 1))
-outList.insert(pos, clock(80, 260))
+outList.insert(pos, clock(90, 340))
 outList.insert(pos, pin(70, 230, "Left/Right"))
+outList.insert(pos, pin(70, 380, "Pause"))
+outList.insert(pos, gate(80, 270, "OR Gate", "north", 30, 2))
 
 outFile.write("".join(outList))

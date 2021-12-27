@@ -19,6 +19,10 @@ def counter(a, b):
 def pin(a, b, s):
 	return "    <comp lib=\"0\" loc=\"({:d},{:d})\" name=\"Pin\">\n      <a name=\"facing\" val=\"north\"/>\n      <a name=\"tristate\" val=\"false\"/>\n      <a name=\"label\" val=\"{:s}\"/>\n      <a name=\"labelloc\" val=\"south\"/>\n    </comp>".format(a, b, s)
 
+def gate(x, y, type, facing, siz, inputs):
+	return "    <comp lib=\"1\" loc=\"({:d},{:d})\" name=\"{:s}\">\n      <a name=\"facing\" val=\"{:s}\"/>\n      <a name=\"size\" val=\"{:d}\"/>\n      <a name=\"inputs\" val=\"{:d}\"/>\n    </comp>\n".format(x, y, type, facing, siz, inputs)
+
+
 sampleFile = open("Sample.circ", mode = "r")
 outFile = open("LED.circ", mode = "w")
 wordsFile = open("Words.txt", mode = "r")
@@ -54,18 +58,17 @@ wireTY = 360
 wireTS = 10
 
 # 生成所有 Wire ，带拐点
+outList.insert(pos,wire(90, 540, 90, 610))
 outList.insert(pos,wire(100, 480, 160, 480))
 for i in range(42):
 	outList.insert(pos, wire(wireHX, wireHY + i * wireHS, wireTX + i * wireTS, wireHY + i * wireHS))
 	outList.insert(pos, wire(wireTX + i * wireTS, wireHY + i * wireHS, wireTX + i * wireTS, wireTY))
 for i in range(1, 42):
 	outList.insert(pos, wire(160, wireHY + (i - 1) * wireHS, 160, wireHY + i * wireHS))
-outList.insert(pos, wire(90, 570, 90, 560))
-outList.insert(pos, wire(90, 560, 100, 560))
-outList.insert(pos, wire(100, 560, 100, 510))
-outList.insert(pos, wire(100, 510, 90, 510))
+outList.insert(pos, wire(110, 570, 110, 510))
+outList.insert(pos, wire(110, 510, 90, 510))
 outList.insert(pos, wire(90, 510, 90, 500))
-outList.insert(pos, wire(80, 520, 80, 500))
+outList.insert(pos, wire(80, 510, 80, 500))
 
 # 生成两个 LED 阵列
 outList.insert(pos, matrix(330, 360, 21, 32))
@@ -73,7 +76,10 @@ outList.insert(pos, matrix(540, 360, 21, 32))
 
 # 生成计数器、时钟，及其控制部分
 outList.insert(pos, counter(int(math.log(fpNum, 2)) + 1, fpNum - 1))
-outList.insert(pos, clock(80, 520))
-outList.insert(pos, pin(90, 570, "Reset"))
+outList.insert(pos, clock(70, 540))
+outList.insert(pos, pin(110, 570, "Reset"))
+outList.insert(pos, pin(90, 610, "Pause"))
+outList.insert(pos, gate(80, 510, "OR Gate", "north", 30, 2))
+
 
 outFile.write("".join(outList))

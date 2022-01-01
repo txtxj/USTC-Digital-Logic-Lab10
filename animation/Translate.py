@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import sys
 
-def video2imgs(video_name, size):
+def video2imgs(video_name, size, gap):
 	"""
 
 	:param video_name: 字符串, 视频文件的路径
@@ -20,7 +20,8 @@ def video2imgs(video_name, size):
 		# cap.read() 返回值介绍：
 		#   ret 表示是否读取到图像
 		#   frame 为图像矩阵，类型为 numpy.ndarry.
-		ret, frame = cap.read()
+		for i in range(gap):
+			ret, frame = cap.read()
 		ret, frame = cap.read()
 		if ret:
 			# 转换成灰度图，也可不做这一步，转换成彩色字符视频。
@@ -72,7 +73,7 @@ def imgs2bits(imgs, mag):
 xpx = 42
 ypx = 32
 
-imgs = video2imgs(sys.argv[1], (xpx, ypx))
+imgs = video2imgs(sys.argv[1], (xpx, ypx), int(sys.argv[3]))
 bits = imgs2bits(imgs, int(sys.argv[2]))
 
 f = open("Words.txt", mode = "w")

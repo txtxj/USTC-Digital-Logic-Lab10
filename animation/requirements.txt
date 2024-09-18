@@ -1,1 +1,1 @@
-opencv-python~=4.5.4.60
+opencv-python>=4.8.1.78
